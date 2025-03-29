@@ -51,6 +51,26 @@ function applyStyles() {
   const values = document.querySelectorAll(".value");
   const labels = document.querySelectorAll(".label");
 
+  // Стилізація контейнера
+  timer.style.display = "flex";
+  timer.style.gap = "20px";
+  timer.style.justifyContent = "center";
+  timer.style.alignItems = "center";
+  timer.style.marginTop = "20px";
+  timer.style.fontFamily = "Arial, sans-serif";
+
+ // Стилізація flatpickr-mobile
+  const flatpickrMobile = document.querySelector(".flatpickr-mobile");
+  flatpickrMobile.style.width = "500px";
+  flatpickrMobile.style.padding = "10px";
+  flatpickrMobile.style.backgroundColor = "#282c34";
+  flatpickrMobile.style.color = "#ffffff";
+  flatpickrMobile.style.borderRadius = "8px";
+  flatpickrMobile.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.2)";
+  flatpickrMobile.style.fontSize = "48px";
+  
+
+
   // Стилізація таймера
   timer.style.display = "flex";
   timer.style.gap = "20px";
@@ -86,13 +106,13 @@ function applyStyles() {
   });
 
   // Стилізація кнопки
-  startButton.style.backgroundColor = "#61dafb";
+  startButton.style.backgroundColor = "#4E35DE";
   startButton.style.border = "none";
   startButton.style.padding = "10px 15px";
-  startButton.style.borderRadius = "5px";
+  startButton.style.borderRadius = "8px";
   startButton.style.color = "#ffffff";
   startButton.style.cursor = "pointer";
-  startButton.style.fontSize = "1rem";
+  startButton.style.fontSize = "48px";
   startButton.style.fontWeight = "bold";
 }
 
