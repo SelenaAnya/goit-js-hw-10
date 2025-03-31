@@ -70,6 +70,41 @@ function applyStyles() {
     field.style.alignItems = "center";
   });
 
+  values.forEach((value) => {
+    value.style.fontSize = "48px";
+    value.style.fontWeight = "bold";
+    value.style.color = "#61dafb";
+  });
+  labels.forEach((label) => {
+    label.style.fontSize = "24px";
+    label.style.color = "#61dafb";
+  });
+
+  // Стилізація flatpickr
+  const flatpickrWrapper = document.querySelector(".flatpickr-wrapper");
+  flatpickrWrapper.style.display = "flex";
+  flatpickrWrapper.style.justifyContent = "center";
+  flatpickrWrapper.style.alignItems = "center";
+
+  const flatpickrInput = document.querySelector(".flatpickr-input");
+  flatpickrInput.style.width = "300px";
+  flatpickrInput.style.padding = "10px";
+  flatpickrInput.style.backgroundColor = "#282c34";
+  flatpickrInput.style.color = "#ffffff";
+  flatpickrInput.style.borderRadius = "8px";
+  flatpickrInput.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.2)";
+  flatpickrInput.style.fontSize = "18px";
+  flatpickrInput.style.textAlign = "center";
+
+
+  const flatpickrSelected = document.querySelectorAll(".flatpickr-selected");
+  flatpickrSelected.forEach((selected) => {
+    selected.style.backgroundColor = "#61dafb";
+    selected.style.color = "#282c34";
+    selected.style.borderRadius = "8px";
+    selected.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.2)";
+  });
+
  // Стилізація flatpickr-mobile
   const flatpickrMobile = document.querySelector(".flatpickr-mobile");
   flatpickrMobile.style.width = "500px";
@@ -126,8 +161,9 @@ function applyStyles() {
   startButton.style.fontWeight = "bold";
 }
 
-// Виклик функції стилізації
-applyStyles();
+document.addEventListener("DOMContentLoaded", () => {
+    applyStyles(); // Викликаємо стилізацію після завантаження DOM
+});
 
 // Відключення вибору дати під час таймера
 function disableDatePicker() {
