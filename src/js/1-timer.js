@@ -1,5 +1,7 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css";
 
 const datetimePicker = document.querySelector("#datetime-picker");
 const startButton = document.querySelector("[data-start]");
@@ -20,7 +22,11 @@ flatpickr(datetimePicker, {
   onClose(selectedDates) {
     userSelectedDate = selectedDates[0];
     if (userSelectedDate < new Date()) {
-      alert("Please choose a date in the future");
+      iziToast.error({
+        title: "Помилка",
+        message: "Будь ласка, оберіть дату в майбутньому",
+        position: "topRight",
+      });
       disableButton(startButton); // Заблокувати кнопку
     } else {
       enableButton(startButton); // Розблокувати кнопку
@@ -28,17 +34,21 @@ flatpickr(datetimePicker, {
   },
 });
 
-// Функції для керування кнопкою
+// Функції для керування станом кнопки
 function disableButton(button) {
-  button.disabled = true;
-  button.style.backgroundColor = "#a0a0a0";
-  button.style.cursor = "not-allowed";
+  if (button) {
+    button.disabled = true;
+    button.style.backgroundColor = "#a0a0a0";
+    button.style.cursor = "not-allowed";
+  }
 }
 
 function enableButton(button) {
-  button.disabled = false;
-  button.style.backgroundColor = "#61dafb";
-  button.style.cursor = "pointer";
+  if (button) {
+    button.disabled = false;
+    button.style.backgroundColor = "#61dafb";
+    button.style.cursor = "pointer";
+  }
 }
 
 // Блокуємо кнопку "Start" на початку
@@ -50,14 +60,15 @@ function applyStyles() {
   const fields = document.querySelectorAll(".field");
   const values = document.querySelectorAll(".value");
   const labels = document.querySelectorAll(".label");
-
-  // Стилізація контейнера
-  timer.style.display = "flex";
-  timer.style.gap = "20px";
-  timer.style.justifyContent = "center";
-  timer.style.alignItems = "center";
-  timer.style.marginTop = "20px";
-  timer.style.fontFamily = "Arial, sans-serif";
+  if (timer) {
+    timer.style.display = "flex";
+    timer.style.gap = "48px";
+    timer.style.justifyContent = "center";
+  }
+  fields.forEach((field) => {
+    field.style.flexDirection = "column";
+    field.style.alignItems = "center";
+  });
 
  // Стилізація flatpickr-mobile
   const flatpickrMobile = document.querySelector(".flatpickr-mobile");
@@ -67,10 +78,9 @@ function applyStyles() {
   flatpickrMobile.style.color = "#ffffff";
   flatpickrMobile.style.borderRadius = "8px";
   flatpickrMobile.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.2)";
-  flatpickrMobile.style.fontSize = "48px";
+  flatpickrMobile.style.fontSize = "38px";
+  flatpickrMobile.style.textAlign = "center";  
   
-
-
   // Стилізація таймера
   timer.style.display = "flex";
   timer.style.gap = "20px";
@@ -78,6 +88,7 @@ function applyStyles() {
   timer.style.alignItems = "center";
   timer.style.marginTop = "20px";
   timer.style.fontFamily = "Arial, sans-serif";
+  timer.style.marginTop = "60px";
 
   // Стилізація полів
   fields.forEach((field) => {
@@ -111,7 +122,6 @@ function applyStyles() {
   startButton.style.padding = "10px 15px";
   startButton.style.borderRadius = "8px";
   startButton.style.color = "#ffffff";
-  startButton.style.cursor = "pointer";
   startButton.style.fontSize = "48px";
   startButton.style.fontWeight = "bold";
 }
@@ -119,9 +129,25 @@ function applyStyles() {
 // Виклик функції стилізації
 applyStyles();
 
+// Відключення вибору дати під час таймера
+function disableDatePicker() {
+    if (datetimePicker) {
+        datetimePicker.disabled = true; // Блокуємо календар
+        datetimePicker.style.cursor = "not-allowed"; // Візуальна індикація
+    }
+}
+function enableDatePicker() {
+    if (datetimePicker) {
+        datetimePicker.disabled = false; // Розблоковуємо календар
+        datetimePicker.style.cursor = "pointer"; // Повертаємо стандартний стан
+    }
+}
+
 // Обробник натискання на кнопку "Start"
 startButton.addEventListener("click", () => {
   if (!userSelectedDate) return;
+
+  disableDatePicker(); // Заблокувати вибір дати
 
   if (countdownInterval) clearInterval(countdownInterval); // Зупинити попередній інтервал
 
@@ -131,8 +157,14 @@ startButton.addEventListener("click", () => {
 
     if (timeDifference <= 0) {
       clearInterval(countdownInterval);
-      alert("Час вийшов!");
+      countdownInterval = null;
+      iziToast.info({
+        title: "Час вийшов",
+        message: "Таймер завершено!",
+        position: "topRight",
+      });
       updateTimerDisplay(0, 0, 0, 0);
+      enableDatePicker(); // Розблокувати вибір дати
       return;
     }
 
@@ -140,6 +172,7 @@ startButton.addEventListener("click", () => {
     updateTimerDisplay(days, hours, minutes, seconds);
   }, 1000);
 });
+
 
 // Конвертуємо мілісекунди у дні, години, хвилини, секунди
 function convertMs(ms) {
@@ -163,3 +196,4 @@ function updateTimerDisplay(days, hours, minutes, seconds) {
   minutesSpan.textContent = minutes.toString().padStart(2, "0");
   secondsSpan.textContent = seconds.toString().padStart(2, "0");
 }
+
